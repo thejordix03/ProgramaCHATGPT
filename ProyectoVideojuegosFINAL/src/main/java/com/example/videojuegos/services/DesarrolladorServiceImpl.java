@@ -1,8 +1,7 @@
-package com.example.videojuegos.service;
+package com.example.videojuegos.services;
 
 import com.example.videojuegos.model.Desarrollador;
 import com.example.videojuegos.repository.DesarrolladorRepository;
-import com.example.videojuegos.services.DesarrolladorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,30 +11,26 @@ import java.util.Optional;
 @Service
 public class DesarrolladorServiceImpl implements DesarrolladorService {
 
-    private final DesarrolladorRepository desarrolladorRepository;
-
     @Autowired
-    public DesarrolladorServiceImpl(DesarrolladorRepository desarrolladorRepository) {
-        this.desarrolladorRepository = desarrolladorRepository;
+    private DesarrolladorRepository desarrolladorRepository;
+
+    @Override
+    public Desarrollador save(Desarrollador desarrollador) {
+        return desarrolladorRepository.save(desarrollador);
     }
 
     @Override
-    public void crear(Desarrollador desarrollador) {
-        desarrolladorRepository.save(desarrollador);
-    }
-
-    @Override
-    public List<Desarrollador> obtenerTodos() {
+    public List<Desarrollador> findAll() {
         return desarrolladorRepository.findAll();
     }
 
     @Override
-    public void eliminar(Long id) {
-        desarrolladorRepository.deleteById(id);
+    public Optional<Desarrollador> findById(Long id) {
+        return desarrolladorRepository.findById(id);
     }
 
     @Override
-    public Optional<Desarrollador> obtenerPorId(Long id) {
-        return desarrolladorRepository.findById(id);
+    public void deleteById(Long id) {
+        desarrolladorRepository.deleteById(id);
     }
 }

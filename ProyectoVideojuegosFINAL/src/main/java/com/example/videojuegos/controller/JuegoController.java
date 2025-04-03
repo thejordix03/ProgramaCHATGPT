@@ -5,29 +5,34 @@ import com.example.videojuegos.services.JuegoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/juegos")
 public class JuegoController {
 
-    private final JuegoService juegoService;
-
     @Autowired
-    public JuegoController(JuegoService juegoService) {
-        this.juegoService = juegoService;
+    private JuegoService juegoService;
+
+    @PostMapping
+    public Juego crearJuego(@RequestBody Juego juego) {
+        return juegoService.save(juego);
     }
 
-    // Método para obtener un juego por ID
+    @GetMapping
+    public List<Juego> obtenerTodos() {
+        return juegoService.findAll();
+    }
+
     @GetMapping("/{id}")
-    public Juego obtenerJuegoPorId(@PathVariable Long id) {
-        Optional<Juego> juego = juegoService.obtenerPorId(id);
-        if (juego.isPresent()) {
-            return juego.get();
-        } else {
-            throw new RuntimeException("Juego no encontrado con ID: " + id);
-        }
+    public Juego obtenerPorId(@PathVariable Long id) {
+        Optional<Juego> juego = juegoService.findById(id);
+        return juego.orElse(null);  // Devuelve null si no se encuentra el juego
     }
 
-    // Otros métodos para gestionar juegos pueden ir aquí...
+    @DeleteMapping("/{id}")
+    public void eliminarPorId(@PathVariable Long id) {
+        juegoService.deleteById(id);
+    }
 }
